@@ -1,2 +1,2 @@
-# flutter-rc-calculator
+#calculator RC
 calculadora para vendas
