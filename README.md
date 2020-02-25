@@ -1,2 +1,2 @@
-#calculator RC
+# calculator RC
 calculadora para vendas
