@@ -178,9 +178,10 @@ class _MyHomePageState extends State<MyHomePage> {
       @required double valorEntrada,
       @required int parcelas,
       @required bool minimo}) {
-    print('isMInimo: $isMinimo');
     _valorEntradaMinima = _valorDaVenda * 0.05;
     if (minimo) {
+      _corCampoValorDaVenda = _corCamposEditavel;
+      _corCampoEntrada = _corCamposEditavel;
       _valorEntrada = _valorEntradaMinima;
       _labelEntrada = 'Entrada 5%';
       _labelSaldoAPagar = 'Saldo a pagar sem acréscimo';
@@ -257,10 +258,15 @@ class _MyHomePageState extends State<MyHomePage> {
             minimo: true,
           );
         } else if (index == 1) {
+          isMinimo = false;
           _valorEntrada =
               double.parse(value.replaceAll(RegExp('[^0-9]'), "")) / 100;
-          isMinimo = false;
+          _valorDaVenda = double.parse(
+                  _valorVendaController.text.replaceAll(RegExp('[^0-9]'), "")) /
+              100;
+
           if (_valorDaVenda == 0.0) {
+            _zerarTodosValores();
             _showErro('Defina o valor da venda');
             _corCampoValorDaVenda = Colors.red.withOpacity(0.60);
           } else {
@@ -464,23 +470,15 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  
-  _focusOutValorDaVenda() {
-
-    String _onlyDigits =
-        _valortotalDaVendaController.text.replaceAll(RegExp('[^0-9]'), "");
-    _valorDaVenda = double.parse(_onlyDigits) / 100;
-
-    if (!focusValorVenda.hasFocus && _valorDaVenda > 0.0) {
-      _calcular(
-        valorVenda: _valorDaVenda,
-        valorEntrada: 0.0,
-        parcelas: _quantidadeParcelas,
-        minimo: true,
-      );
-    }
+  _zerarTodosValores() {
+    _valorVendaController.text = 'R\$ 0,00';
+    _valorEntradaController.text = 'R\$ 0,00';
+    _saldoAPagarController.text = 'R\$ 0,00';
+    _valorDasParcelasController.text = 'R\$ 0,00';
+    _valorParceladoController.text = 'R\$ 0,00';
+    _valortotalDaVendaController.text = 'R\$ 0,00';
+    _montanteTotalAcrescimoController.text = 'R\$ 0,00';
   }
-  
 
   @override
   void dispose() {
@@ -491,7 +489,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    focusValorVenda.addListener(_focusOutValorDaVenda);
 
     _corCamposEditavel = Colors.white60;
     _corCampoValorDaVenda = _corCamposEditavel;
